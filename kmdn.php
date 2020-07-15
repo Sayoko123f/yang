@@ -1,14 +1,14 @@
 <?php
-set_time_limit(1200);
-
+set_time_limit(1800);
+ini_set('user_agent','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36');
 require_once('simple_html_dom.php');
 require_once('connect_DB.php'); // DB = $con
 
 
-$url = 'https://www.kmdn.gov.tw/1117/1271/1274/321010/';
+$url = 'https://www.kmdn.gov.tw/1117/1271/1274/292726';
 for ($i = 0; $i < 2000; $i++) {
     $i == 0 ? $p = new Post($url) : $p = new Post($p->nextUrl);
-    echo $p->url . '<br/>';
+    //echo $p->url . '<br/>';
     try {
         $stmt = $con->prepare('INSERT INTO `kmdn`(`url`,`heading`,`date`,`author`,`clickRate`,`content`) VALUE(:url,:heading,:date,:author,:clickRate,:content)');
         $stmt->bindParam(':url', $p->url);
@@ -25,7 +25,7 @@ for ($i = 0; $i < 2000; $i++) {
             die("PDOException: " . $e->getMessage() . "<br/>");
         }
     }
-    sleep(1);
+    sleep(0.5);
 }
 
 
