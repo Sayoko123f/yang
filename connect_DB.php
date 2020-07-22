@@ -10,11 +10,8 @@ try {
 } catch (PDOException $e) {
     die("連接資料庫失敗: " . $e->getMessage() . "<br/>");
 }
-/*
-$con->query('DROP TABLE `kmdn`');
-*/
-$sql = 'CREATE TABLE IF NOT EXISTS `shinai`.`kmdn` ( `id` INT NOT NULL AUTO_INCREMENT , `url` TEXT NOT NULL , `heading` TEXT NOT NULL , `date` TEXT NOT NULL , `author` TEXT NOT NULL , `clickRate` INT UNSIGNED NOT NULL , `content` TEXT NULL , PRIMARY KEY (`id`), UNIQUE (`url`)) ENGINE = InnoDB CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
-';
+
+$sql = 'CREATE TABLE IF NOT EXISTS `shinai`.`kmdn` ( `id` INT NOT NULL AUTO_INCREMENT , `url` TEXT NOT NULL , `heading` TEXT NOT NULL , `date` TEXT NOT NULL , `author` TEXT NOT NULL , `clickRate` INT UNSIGNED NOT NULL , `content` TEXT NULL , PRIMARY KEY (`id`), UNIQUE (`url`)) ENGINE = InnoDB CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;';
 $con->query($sql);
 
 /*

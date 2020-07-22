@@ -5,8 +5,8 @@ require_once('simple_html_dom.php');
 require_once('connect_DB.php'); // DB = $con
 
 
-$url = 'https://www.kmdn.gov.tw/1117/1271/1274/292726';
-for ($i = 0; $i < 2000; $i++) {
+$url = 'https://www.kmdn.gov.tw/1117/1271/1274/41947';
+for ($i = 0; $i < 3000; $i++) {
     $i == 0 ? $p = new Post($url) : $p = new Post($p->nextUrl);
     //echo $p->url . '<br/>';
     try {
@@ -25,7 +25,7 @@ for ($i = 0; $i < 2000; $i++) {
             die("PDOException: " . $e->getMessage() . "<br/>");
         }
     }
-    sleep(0.5);
+    sleep(0.7);
 }
 
 
