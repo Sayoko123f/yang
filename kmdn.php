@@ -4,8 +4,8 @@ set_time_limit(1800);
 require_once('simple_html_dom.php');
 require_once('connect_DB.php'); // DB = $con
 
-//$url = 'https://www.kmdn.gov.tw/1117/1271/1274/33601';
-$url = get_end_url($con);
+$url = 'https://www.kmdn.gov.tw/1117/1271/1274/321595/';
+//$url = get_end_url($con);
 for ($i = 0; $i < 3000; $i++) {
     ini_set('user_agent',get_rand_useragent());
     $i == 0 ? $p = new Post($url) : $p = new Post($p->nextUrl);
@@ -24,8 +24,8 @@ for ($i = 0; $i < 3000; $i++) {
         echo PHP_EOL;
     } catch (PDOException $e) {
         if ($e->getCode() == 23000) {
-            echo 'continue' . PHP_EOL;
-            continue;
+            echo 'break' . PHP_EOL;
+            break;
         } else {
             die("PDOException: " . $e->getMessage() . "<br/>");
         }
