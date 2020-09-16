@@ -3,6 +3,7 @@ require_once('$con.php');
 $dir = "./output/";
 $files = glob($dir . '*.txt');
 foreach ($files as $filename) {
+    echo $filename . PHP_EOL;
     $jsonfilename = str_replace('.txt', '_words.json', $filename);
 
     // JSON
@@ -12,9 +13,8 @@ foreach ($files as $filename) {
     $arr = json_decode($line);
     $questionNumber = '';
     foreach ($arr as $k => $v) {
-        echo $filename . PHP_EOL;
         $item = new Item($filename, $k, $v);
-        //echo $item->questionNumber . ' ' . $item->word . PHP_EOL;
+        echo $item->word . ' ';
         try {
             $sql = "INSERT INTO `exam_question_words`(`ab`,`year`,`questionNumber`,`questionType`,`word`,`words`,`count`,`level`) VALUES(:ab,:year,:questionNumber,:questionType,:word,:words,:count,:level);";
             $stmt = $con->prepare($sql);
@@ -38,16 +38,18 @@ foreach ($files as $filename) {
     $t = fopen($filename, 'r');
     $line = fgets($t);
     $line = filter_symbol($line, false);
-    //echo $line . PHP_EOL;
+    echo PHP_EOL . $line . PHP_EOL;
     try {
-        $sql = "INSERT INTO `exam_question`(`questionNumber`,`content`) VALUES($questionNumber,$line);";
-        $con->query($sql);
+        $sql = "INSERT INTO `exam_question`(`questionNumber`,`content`) VALUES(:questionNumber,:content);";
+        $stmt = $con->prepare($sql);
+        $stmt->bindParam(':questionNumber', $questionNumber);
+        $stmt->bindParam(':content', $line);
+        $stmt->execute();
     } catch (\PDOException $e) {
         die($e->getMessage());
     }
     fclose($t);
 }
-
 
 class Item
 {
@@ -81,8 +83,8 @@ class Item
         };
         $this->ab = $matches[1];
         $this->year = intval($matches[2]);
-        $this->questionNumber = $this->ab . $this->year . $matches[3];
         $this->questionType = $matches[4];
+        $this->questionNumber = $this->ab . $this->year . $matches[3] . $this->questionType;
     }
 
     protected static function myfilter($str)
