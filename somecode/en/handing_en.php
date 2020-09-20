@@ -2,8 +2,10 @@
 require_once('$con.php');
 $dir = "./output/";
 $files = glob($dir . '*.txt');
+$i=0;
 foreach ($files as $filename) {
-    echo $filename . PHP_EOL;
+    if(++$i>20){break;}
+    echo PHP_EOL.'filename: '.$filename . PHP_EOL;
     $jsonfilename = str_replace('.txt', '_words.json', $filename);
 
     // JSON
@@ -13,7 +15,7 @@ foreach ($files as $filename) {
     $arr = json_decode($line);
     $questionNumber = '';
     foreach ($arr as $k => $v) {
-        $item = new Item($filename, $k, $v);
+        $item = new Item($jsonfilename, $k, $v);
         echo $item->word . ' ';
         try {
             $sql = "INSERT INTO `exam_question_words`(`ab`,`year`,`questionNumber`,`questionType`,`word`,`words`,`count`,`level`) VALUES(:ab,:year,:questionNumber,:questionType,:word,:words,:count,:level);";
@@ -31,6 +33,7 @@ foreach ($files as $filename) {
             die($e->getMessage());
         }
         $questionNumber = $item->questionNumber;
+        //echo ':'.$questionNumber.PHP_EOL;
     }
     fclose($f);
     // endJSON
@@ -38,7 +41,7 @@ foreach ($files as $filename) {
     $t = fopen($filename, 'r');
     $line = fgets($t);
     $line = filter_symbol($line, false);
-    echo PHP_EOL . $line . PHP_EOL;
+    //echo PHP_EOL . $line . PHP_EOL;
     try {
         $sql = "INSERT INTO `exam_question`(`questionNumber`,`content`) VALUES(:questionNumber,:content);";
         $stmt = $con->prepare($sql);
