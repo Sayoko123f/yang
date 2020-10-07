@@ -3,9 +3,8 @@ require_once('$con.php');
 $dir = "./maindatav2/";
 $files = glob($dir . '*.txt');
 $csv = fopen('maindata.csv', 'w');
-$fieldlist = array('ab', 'year', 'questionType', 'title', 'word', 'words', 'count', 'level', 'pos');
-fwrite($csv, implode(',', $fieldlist));
-fwrite($csv, PHP_EOL);
+$fieldlist = array('ab', 'year', 'questionType', 'title', 'word', 'words', 'count', 'level', 'pos', 'fromChoices');
+fputcsv($csv, $fieldlist);
 $i = 0;
 
 foreach ($files as $filename) {
@@ -60,7 +59,7 @@ foreach ($files as $filename) {
             */
             //echo "$k, ";
         }
-        createItem($matches, $k, $v, $csv);
+        createItem($matches, $k, $v, $csv, true);
     }
 
     //passage
@@ -75,18 +74,23 @@ foreach ($files as $filename) {
             . $v->pos . PHP_EOL; //string
             */
         //echo "$k, ";
-        createItem($matches, $k, $v, $csv);
+        createItem($matches, $k, $v, $csv, false);
     }
 
     fclose($f);
 }
 fclose($csv);
 
-function createItem($matches, $k, $v, $handle)
+function createItem($matches, $k, $v, $handle, $fromChoices)
 {
-    $item = new Item($matches, $k, $v);
+    if (!filiter_word($k)) {
+        echo "filiter word: $k" . PHP_EOL;
+        return false;
+    }
+    $item = new Item($matches, $k, $v, $fromChoices);
     //var_dump($item);
-    fwrite($handle, $item);
+    fputcsv($handle, $item->tocsv());
+    return true;
 }
 
 
@@ -102,15 +106,17 @@ class Item
     public $count; // int
     public $level; // int
     public $pos;
+    public $fromChoices; // 
 
-    public function __construct($titlematches, $k, $v)
+    public function __construct($titlematches, $k, $v, $fromChoices)
     {
         $this->titleParse($titlematches);
-        $this->word = $k;
-        $this->words = $v->words;
+        $this->word = self::myfilter($k);
+        $this->words = self::myfilter($v->words);
         $this->count = $v->count;
         $this->level = $v->level;
         $this->pos = $v->pos;
+        $this->fromChoices = $fromChoices ? 1 : 0;
     }
 
 
@@ -119,6 +125,8 @@ class Item
 
         //var_dump($matches);
         $this->title = $matches[0];
+        $this->title = str_replace('-099','-99',$this->title);
+        $this->title = str_replace(' ','',$this->title);
         $this->ab = $matches[1];
         $this->year = intval($matches[2]);
         $this->questionType = $matches[3];
@@ -130,18 +138,23 @@ class Item
         return str_replace('’', '\'', $str);
     }
 
-    function __toString()
+
+
+    function tocsv()
     {
-        return $this->ab . ','
-            . $this->year . ','
-            . $this->questionType . ','
-            . $this->title . ','
-            . $this->word . ','
-            . $this->words . ','
-            . $this->count . ','
-            . $this->level . ','
-            . $this->pos
-            . PHP_EOL;
+        $arr = array(
+            $this->ab,
+            $this->year,
+            $this->questionType,
+            $this->title,
+            $this->word,
+            $this->words,
+            $this->count,
+            $this->level,
+            $this->pos,
+            $this->fromChoices
+        );
+        return $arr;
     }
 }
 
@@ -153,4 +166,21 @@ function filter_symbol($str, $backslash = true)
     $str = str_replace('“', $tmp . '"', $str);
     $str = str_replace('”', $tmp . '"', $str);
     return $str;
+}
+
+function str_to_csv($str)
+{
+    if (!is_int($str)) {
+        $str = str_replace('"', '""', $str);
+    }
+    $str = '"' . $str . '"';
+    return $str;
+}
+
+function filiter_word($str)
+{
+    if (preg_match('/^-/', $str)) {
+        return false;
+    }
+    return true;
 }

@@ -2,10 +2,12 @@
 require_once('$con.php');
 $dir = "./output/";
 $files = glob($dir . '*.txt');
-$i=0;
+$i = 0;
 foreach ($files as $filename) {
-    if(++$i>20){break;}
-    echo PHP_EOL.'filename: '.$filename . PHP_EOL;
+    if (++$i > 20) {
+        break;
+    }
+    echo PHP_EOL . 'filename: ' . $filename . PHP_EOL;
     $jsonfilename = str_replace('.txt', '_words.json', $filename);
 
     // JSON

@@ -22,6 +22,6 @@ foreach ($files as $filename) {
         $stmt->bindParam(':content', $content);
         $stmt->execute();
     } catch (\PDOException $e) {
-        die($e->getMessage());
+        die($filename.' : '.$e->getMessage());
     }
 }
