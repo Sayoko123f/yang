@@ -1,5 +1,5 @@
 <?php
-require_once('$con.php');
+//require_once('$con.php');
 $dir = "./maindatav2/";
 $files = glob($dir . '*.txt');
 $csv = fopen('maindata.csv', 'w');
