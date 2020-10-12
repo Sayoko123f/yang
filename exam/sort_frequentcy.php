@@ -1,5 +1,5 @@
 <?php
-$ab = false;
+$ab = true;
 $filename = $ab ? 'A_frequentcy.csv' : 'B_frequentcy.csv';
 $outputfilename = $ab ? 'A_sort_frequentcy.csv' : 'B_sort_frequentcy.csv';
 $inputfile = fopen($filename, 'r');

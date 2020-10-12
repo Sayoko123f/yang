@@ -28,7 +28,7 @@ while ($line = fgetcsv($csv)) {
 }
 $data = $data->getData();
 print_r($data);
-$json = fopen('./unique_maindata.json', 'w');
+$json = fopen('./Q1.json', 'w');
 fwrite($json, json_encode($data));
 fclose($json);
 fclose($csv);
