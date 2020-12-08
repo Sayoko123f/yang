@@ -1,17 +1,17 @@
 <?php
 try {
     $host = "localhost";
-    $db_name = "shinai";
-    $db_user = "Shinai";
+    $db_name = "test";
+    $db_user = "test";
     $db_password = "123";
     $con = new PDO("mysql:host=$host;dbname=$db_name;charset=utf8", $db_user, $db_password); //(server_name,user,password)
     // set the PDO error mode to exception
     $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
+} catch (\PDOException $e) {
     die("連接資料庫失敗: " . $e->getMessage() . "<br/>");
 }
 
-importSqlFile($con,'kmdn.sql');
+//importSqlFile($con,'kmdn.sql');
 
 /**
  * Import SQL File

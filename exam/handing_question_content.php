@@ -9,6 +9,7 @@ foreach ($files as $filename) {
     }
     $title = str_replace('.txt', '', $filename);
     $title = str_replace(' ', '', $title);
+    $title = str_replace('099','99', $title);
     $title = str_replace('./maindatav2/', '', $title);
     $content = fread($txt, filesize($filename));
     fclose($txt);
