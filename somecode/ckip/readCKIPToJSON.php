@@ -10,10 +10,11 @@ try {
 } catch (\PDOException $e) {
     die("連接資料庫失敗: " . $e->getMessage() . "<br/>");
 }
-
+$con->query("DROP TABLE `test`;");
 $sql = "CREATE TABLE IF NOT EXISTS `test`(
     `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT, 
-`contentJSON` JSON NOT NULL
+`word` JSON NOT NULL,
+`category` JSON NOT NULL
 )CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;";
 $con->query($sql);
 $dir = "./";
@@ -37,15 +38,15 @@ foreach ($glob as $filename) {
         $arr1[] = $v->word;
         $arr2[] = $v->category;
     }
-    $json = new \stdClass();
-    $json->w = $arr1;
-    $json->c = $arr2;
-    $json = json_encode($json);
+    $valueWord = json_encode($arr1);
+    $valueCategory = json_encode($arr2);
+
 
     /** sql */
-    $sql = "INSERT INTO `test` (`contentJSON`) VALUES (:json);";
+    $sql = "INSERT INTO `test` (`word`,`category`) VALUES (:word,:category);";
     $stmt = $con->prepare($sql);
-    $stmt->bindParam(':json', $json);
+    $stmt->bindParam(':word', $valueWord);
+    $stmt->bindParam(':category', $valueCategory);
     $stmt->execute();
 }
 /**
