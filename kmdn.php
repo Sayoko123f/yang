@@ -2,8 +2,8 @@
 require_once('connect_DB.php'); // DB = $con
 require_once('simple_html_dom.php');
 
-$table = 'kmdn_yehua';
-$url = 'https://www.kmdn.gov.tw/1117/1271/1275/326369/';
+$table = 'test';
+$url = 'https://www.kmdn.gov.tw/1117/1271/1274/327158/';
 $sql = "CREATE TABLE IF NOT EXISTS `$table`(" .
     "`id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT," .
     "`url` TEXT NOT NULL," .
@@ -17,7 +17,7 @@ $con->query($sql);
 for ($i = 0; $i < 3000; $i++) {
     $i === 0 ? $p = new Post($url) : $p = new Post($p->nextUrl);
     // echo nl2br($p);echo $p;
-    if ($p->date === '2020/01/01') {
+    if ($p->url === 'https://www.kmdn.gov.tw/1117/1271/1274/326373'||$p->date==='2020/12/07') {
         break;
     }
     $sql = "INSERT INTO `$table`(`url`,`heading`,`date`,`author`,`clickRate`,`content`) VALUES(?,?,?,?,?,?);";

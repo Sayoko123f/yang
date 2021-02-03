@@ -1,6 +1,6 @@
 <?php
 //require_once('$con.php');
-$dir = "./maindatav2/";
+$dir = "./maindatav3/";
 $files = glob($dir . '*.txt');
 $csv = fopen('maindata.csv', 'w');
 $fieldlist = array('ab', 'year', 'questionType', 'title', 'word', 'words', 'count', 'level', 'pos', 'fromChoices');
@@ -23,16 +23,15 @@ foreach ($files as $filename) {
     if (!$obj) {
         echo $jsonfilename . ' json_decode error:(' . PHP_EOL;
         fclose($f);
-        fclose($csv);
         continue;
     }
     //var_dump($obj);
     //echo $obj->title . PHP_EOL;
 
-    if (!preg_match('/(A|B)-(\d{1,3})-([A-Z])\s?-\s?Q\d{1,3}to\d{1,3}/', $obj->title, $matches)) {
+    if (!preg_match('/(A|B)-(\d{1,3})-([A-Za-z])\s?-\s?Q\d{1,3}to\d{1,3}/', $obj->title, $matches)) {
         fclose($f);
         fclose($csv);
-        die($jsonfilename . 'titleParse Error:(');
+        die($jsonfilename . ' titleParse Error:(');
         /*echo $jsonfilename . 'titleParse Error:(' . PHP_EOL;
         continue;*/
     };
@@ -45,7 +44,7 @@ foreach ($files as $filename) {
         if (!isset($obj->choices) || $obj->choices === '' || !$obj->choices) {
             fclose($f);
             fclose($csv);
-            die($jsonfilename . 'titleParse Error:(');
+            die($jsonfilename . ' titleParse Error:(');
             /*echo $obj->title . 'choices error' . PHP_EOL;
             continue;*/
         }
@@ -126,10 +125,11 @@ class Item
         //var_dump($matches);
         $this->title = $matches[0];
         $this->title = str_replace('-099','-99',$this->title);
+        $this->title = str_replace(array('c','m','r','v','d',),strtoupper($matches[3]),$this->title);
         $this->title = str_replace(' ','',$this->title);
         $this->ab = $matches[1];
         $this->year = intval($matches[2]);
-        $this->questionType = $matches[3];
+        $this->questionType = strtoupper($matches[3]);
         return true;
     }
 
