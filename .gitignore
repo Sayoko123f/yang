@@ -5,10 +5,18 @@ data/kmdn.xlsm
 data/kmdn.php
 data/kmdn.zip
 *.tar
-exam/maindatav2
+exam/maindatav3
 exam/run.bat
 *.bat
 exam/maindata - 複製.csv
 exam/Q3_A.json
 exam/Q3_B.json
 exam/output
+0309json/kmdn
+0309json/baike
+0309json/congshu
+0223/*.csv
+*.zip
+data/kmdn_補完2020年.csv
+data/kmdn_補完2020年.php
+exam/Q4.csv
