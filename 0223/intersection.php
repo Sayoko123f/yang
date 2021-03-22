@@ -40,14 +40,15 @@ fclose($handle);
 $result = array('intersection' => array(), 'subtraction' => array(array(), array()));
 foreach ($a as $k => $v) {
     if (array_key_exists($k, $b)) {
-        $result['intersection'][mb_convert_encoding($k, 'UTF-8', 'HTML-ENTITIES')] = array(strval(intval($a[$k][0]) + intval($b[$k][0])), strval(intval($a[$k][1]) + intval($b[$k][1])));
+        $appendKey = "({$a[$k][0]},{$b[$k][0]})({$a[$k][1]},{$b[$k][1]})";
+        $result['intersection'][mb_convert_encoding($k, 'UTF-8', 'HTML-ENTITIES').$appendKey] = array(strval(intval($a[$k][0]) + intval($b[$k][0])), strval(intval($a[$k][1]) + intval($b[$k][1])));
     } else {
-        $result['subtraction'][0][mb_convert_encoding($k, 'UTF-8', 'HTML-ENTITIES')] = array(strval(intval($a[$k][0])), strval(intval($a[$k][1])));
+        $result['subtraction'][0][mb_convert_encoding($k, 'UTF-8', 'HTML-ENTITIES')] = array($a[$k][0], $a[$k][1]);
     }
 }
 foreach ($b as $k => $v) {
     if (!array_key_exists($k, $a)) {
-        $result['subtraction'][1][mb_convert_encoding($k, 'UTF-8', 'HTML-ENTITIES')] = array(strval(intval($b[$k][0])), strval(intval($b[$k][1])));
+        $result['subtraction'][1][mb_convert_encoding($k, 'UTF-8', 'HTML-ENTITIES')] = array($b[$k][0], $b[$k][1]);
     }
 }
 // End calc

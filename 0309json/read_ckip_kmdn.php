@@ -1,6 +1,6 @@
 <?php
 require('$con.php');
-$dir = './congshu/';
+$dir = './kmdn/';
 $files = glob($dir . '*.json');
 $i = 0;
 foreach ($files as $filename) {
@@ -18,7 +18,7 @@ foreach ($files as $filename) {
     $stmt->bindParam(':heading', $arr['heading']);
     $stmt->bindParam(':unixtime', $arr['date']);
     $stmt->bindParam(':author', $arr['author']);
-    $stmt->bindParam(':word', $arr['category']);
+    $stmt->bindParam(':word', $arr['word']);
     $stmt->bindParam(':category', $arr['category']);
     try {
         $stmt->execute();
@@ -27,7 +27,7 @@ foreach ($files as $filename) {
         echo $e->getCode().PHP_EOL.$e->getMessage().PHP_EOL;
         die($filename . PHP_EOL);
     }
-    if ($i++ > 10) {
+    if ($i++ > 4) {
         break;
     }
 }
@@ -65,7 +65,6 @@ function myMatch($str)
     $response = array('word' => array(), 'category' => array());
     preg_match_all('/(.+?)\((.+?)\)\s/', $str, $matches);
     for ($i = 0; $i < count($matches[0]); $i++) {
-        // $word = new Word($matches[1][$i], $matches[2][$i]);
         $response['word'][] = $matches[1][$i];
         $response['category'][] = $matches[2][$i];
     }
